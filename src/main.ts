@@ -9,12 +9,14 @@ import { router } from './routes.js';
 
 const startUrls = ['https://www.youtube.com/@tsuna_nekota/streams'];
 
+
+// launch Options
 const crawler = new PuppeteerCrawler({
     // proxyConfiguration: new ProxyConfiguration({ proxyUrls: ['...'] }),
     requestHandler: router,
     // Comment this option to scrape the full website.
     maxRequestsPerCrawl: 20,
-    headless: false,
+    headless: true,
     // autoscaledPoolOptions: {
     //     isFinishedFunction: async () => newData(),
     // },
