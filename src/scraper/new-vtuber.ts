@@ -3,16 +3,18 @@
 * ChannelId, 설명, 이름, 프로필 사진등
 * */
 
+import {puppeteerUtils} from "crawlee";
+
 export async function newVtuberScrapeProcess(page, log) {
 
-    // await puppeteerUtils.infiniteScroll(page, {scrollDownAndUp: true})
-    await page.waitForSelector('#channel-header')
+    await puppeteerUtils.infiniteScroll(page, {scrollDownAndUp: true})
+    // await page.waitForSelector('#channel-header')
     const channelId = await page.$eval('meta:nth-child(81)', el => el.getAttribute('content'))
-    const data = await getProfile(page)
+    const profile = await getProfile(page)
 
 
     log.info(JSON.stringify(channelId))
-    log.info(JSON.stringify(data))
+    log.info(JSON.stringify(profile))
 }
 
 interface ChannelHeader {
@@ -22,7 +24,7 @@ interface ChannelHeader {
     description: string,
 }
 
-async function getProfile(page) {
+async function getProfile(page): Promise<ChannelHeader> {
     return await page.$$eval('#channel-header', ($posts) => {
         const scrapedData: ChannelHeader[] = [];
 
@@ -35,7 +37,7 @@ async function getProfile(page) {
             })
         })
 
-        return scrapedData
+        return scrapedData[0]
     })
 
 }

@@ -7,7 +7,7 @@ import {puppeteerUtils} from "crawlee";
 
 export async function newChannelScrapeProcess(request, page, log) {
     log.info(request.url)
-    // await puppeteerUtils.infiniteScroll(page, {scrollDownAndUp: true})
+    await puppeteerUtils.infiniteScroll(page, {scrollDownAndUp: true})
     await page.waitForSelector('ytd-rich-grid-renderer')
     const channelId = await page.$eval('meta:nth-child(81)', el => el.getAttribute('content'))
     const data = await getStreamsFromPage(page)
