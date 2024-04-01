@@ -1,22 +1,36 @@
-import {Kysely} from "kysely";
-import {DB} from "./@types/types.js";
-import {PlanetScaleDialect} from "kysely-planetscale";
+import { Kysely, MysqlDialect } from 'kysely';
+import {DB} from "./@types/types";
+import { createPool } from 'mysql2';
 
 const genSecret = () => {
-    if (process.env.DATABASE_URL) {
-        const url = process.env.DATABASE_URL.split('/')[2];
-        const host = url.split('@')[1];
+    const databaseUrl = process.env.DATABASE_URL as string;
+    if (databaseUrl) {
+        const url = databaseUrl.split('/')[2];
+        const database = databaseUrl.split('/')[3];
+        const host = url.split(':')[1].split('@')[1];
+        const port = Number(url.split(':')[2]);
         const username = url.split(':')[0];
         const password = url.split(':')[1].split('@')[0];
-        return { host, username, password };
+        return { host, port, username, password, database };
     }
     return
 };
 
 export const db = new Kysely<DB>({
-    dialect: new PlanetScaleDialect({
-        host: genSecret()?.host ,
-        username:genSecret()?.username ,
-        password:genSecret()?.password
+    dialect: new MysqlDialect({
+        pool: createPool({
+            host: genSecret()?.host,
+            port: genSecret()?.port,
+            user: genSecret()?.username,
+            password: genSecret()?.password,
+            database: genSecret()?.database,
+            ssl: {
+                ca: process.env.DATABASE_CA_CERT,
+                cert: process.env.DATABASE_CLIENT_CERT,
+                key: process.env.DATABASE_CLIENT_KEY,
+                rejectUnauthorized: true,
+                minVersion: 'TLSv1.2',
+            },
+        })
     })
 })
