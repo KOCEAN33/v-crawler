@@ -10,6 +10,7 @@
         "express": "^4.18.3",
         "kysely": "^0.27.2",
         "kysely-planetscale": "^1.4.0",
+        "mysql2": "^3.9.3",
         "puppeteer": "^22.4.0"
     },
     "devDependencies": {
