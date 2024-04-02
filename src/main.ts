@@ -1,6 +1,4 @@
 import { PuppeteerCrawler, log } from 'crawlee';
-import express from 'express';
-import bodyparser from 'body-parser';
 import { router } from './routes.js';
 
 // // 1. 신규 V튜버 확인
