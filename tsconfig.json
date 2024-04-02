@@ -8,9 +8,7 @@
         "noUnusedLocals": false,
         "lib": ["DOM"],
         "noImplicitAny": false,
-        "resolve" : {
-            "extensions" : [".ts", ".js"]
-        }
+        "noImplicitReturns": false
     },
     "include": [
         "./src/**/*"
