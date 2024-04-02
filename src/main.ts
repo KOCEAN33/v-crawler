@@ -1,16 +1,24 @@
+import "./env"
 import { PuppeteerCrawler, log } from 'crawlee';
 import { router } from './routes.js';
+import { getNewVtubers } from './repository/vtubers.repository';
 
-// // 1. 신규 V튜버 확인
-// // 2. 새로운 라이브 내역 확인
-// // 3. 확인 안된 동영상 확인
 
-const crawler = new PuppeteerCrawler({
+//
+// // // 1. 신규 V튜버 확인
+// // // 2. 새로운 라이브 내역 확인
+// // // 3. 확인 안된 동영상 확인
+//
+
+
+
+const newChannelCrawler = new PuppeteerCrawler({
     // proxyConfiguration: new ProxyConfiguration({ proxyUrls: ['...'] }),
     requestHandler: router,
     // Comment this option to scrape the full website.
     maxRequestsPerCrawl: 20,
-    headless: true,
+    headless: false,
+    keepAlive: false,
     browserPoolOptions: {
         fingerprintOptions: {
             fingerprintGeneratorOptions: {
@@ -19,26 +27,14 @@ const crawler = new PuppeteerCrawler({
         }
     }
 });
+// Query new channels
+const newChannels = await getNewVtubers()
+const newChannelUrls = newChannels.map(data => data.url)
 
-await crawler.addRequests(['https://www.youtube.com/@tsuna_nekota/streams'])
+await newChannelCrawler.addRequests(newChannelUrls)
 
-await crawler.run();
+await newChannelCrawler.run();
 
 
-// const app = express();
-// const port = 9000
-// app.use(bodyparser.urlencoded({ extended: false }))
-// app.use(bodyparser.json())
-//
-// app.post('/new', async (req, res) => {
-//
-//
-//
-//
-//
-// })
-//
-// app.listen(port, () => {
-//     console.log(`crawler is running at port: ${port}`)
-// })
+
 

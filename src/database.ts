@@ -13,7 +13,6 @@ const genSecret = () => {
         const password = url.split(':')[1].split('@')[0];
         return { host, port, username, password, database };
     }
-    return
 };
 
 export const db = new Kysely<DB>({

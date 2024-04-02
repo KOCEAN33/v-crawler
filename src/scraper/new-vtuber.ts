@@ -3,18 +3,23 @@
 * ChannelId, 설명, 이름, 프로필 사진등
 * */
 
-import {puppeteerUtils} from "crawlee";
+import { playwrightUtils, puppeteerUtils } from 'crawlee';
+import { getYoutubeChannelId } from './channelId';
 
-export async function newVtuberScrapeProcess(page, log) {
+export async function newVtuberScrapeProcess(page, request, log) {
 
     await puppeteerUtils.infiniteScroll(page, {scrollDownAndUp: true})
-    // await page.waitForSelector('#channel-header')
-    const channelId = await page.$eval('meta:nth-child(81)', el => el.getAttribute('content'))
+    // await page.waitForSelector('#avatar #img')
+
+    await playwrightUtils.gotoExtended(page, request, {waitUntil: 'load'})
+    const channelId = await getYoutubeChannelId(page)
     const profile = await getProfile(page)
 
 
-    log.info(JSON.stringify(channelId))
-    log.info(JSON.stringify(profile))
+    // log.info(JSON.stringify(channelId))
+    // log.info(JSON.stringify(profile))
+
+    return {channelId: channelId, profile: profile}
 }
 
 interface ChannelHeader {

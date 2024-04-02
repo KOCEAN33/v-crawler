@@ -8,8 +8,10 @@ export const router = createPuppeteerRouter();
 
 router.addDefaultHandler(async ({ request, page, log }) => {
 
-    await newVtuberScrapeProcess(page, log)
-    await newChannelScrapeProcess(request, page, log)
+    const data = await newVtuberScrapeProcess(page,request, log)
+    // await newChannelScrapeProcess(request, page, log)
+
+    console.log(data)
 
 });
 
