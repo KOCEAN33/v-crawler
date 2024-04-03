@@ -2,6 +2,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "endOfLine": "auto",
+  "printWidth": 80,
   "overrides": [
     {
       "files": ["*.ts", "*.mts", ".js", ".mjs"],
