@@ -1,11 +1,5 @@
 import { db } from '../database';
-
-interface Profile {
-  image: string;
-  name: string;
-  handle: string;
-  description: string;
-}
+import { Profile } from '../@types/vtubers';
 
 export async function getNewVtubers() {
   return db
@@ -43,12 +37,4 @@ export async function updateNewVtubers(channelId: string, profile: Profile) {
       .where('id', '=', vtuber.vtuber_id)
       .executeTakeFirstOrThrow();
   });
-}
-
-export async function getVtuberByChannelId(channelId: string) {
-  return await db
-    .selectFrom('youtubes')
-    .select(['id', 'url', 'vtuber_id'])
-    .where('url', 'like', `%${channelId}`)
-    .executeTakeFirstOrThrow();
 }

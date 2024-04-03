@@ -3,14 +3,14 @@
  * */
 
 import { puppeteerUtils } from 'crawlee';
+import { YoutubeStream } from '../@types/stream';
 
 export async function newChannelScrapeProcess(request, page, log) {
   log.info(request.url);
+  await page.goto(`${request.url}/streams`);
   await puppeteerUtils.infiniteScroll(page, { scrollDownAndUp: true });
   await page.waitForSelector('ytd-rich-grid-renderer');
-  const channelId = await page.$eval('meta:nth-child(81)', (el) =>
-    el.getAttribute('content'),
-  );
+  // const channelId = await getYoutubeChannelId(page);
   const data = await getStreamsFromPage(page);
 
   const result = data.map((item) => {
@@ -18,29 +18,21 @@ export async function newChannelScrapeProcess(request, page, log) {
     return {
       title: item.title,
       id: videoId,
-      url: item.url,
-      image: item.image,
     };
   });
 
-  log.info(JSON.stringify(result));
-}
-
-interface streamType {
-  title: string;
-  url: string;
-  image: string;
+  log.info(`${result.length} videos crawled successfully`);
+  return result;
 }
 
 async function getStreamsFromPage(page) {
   return await page.$$eval('ytd-rich-item-renderer', ($posts) => {
-    const scrapedData: streamType[] = [];
+    const scrapedData: YoutubeStream[] = [];
 
     $posts.forEach((element) => {
       return scrapedData.push({
         title: element.querySelector('#video-title').textContent.trim(),
         url: element.querySelector('.ytd-thumbnail').href,
-        image: element.querySelector('.yt-core-image').getAttribute('src'),
       });
     });
 
@@ -52,13 +44,3 @@ const extractVideoId = (youtubeLink: string) => {
   const url = new URL(youtubeLink);
   return url.searchParams.get('v');
 };
-
-// const result = data.map((item) => {
-//     const videoId = extractVideoId(item.url);
-//     return {
-//         title: item.title,
-//         id: videoId,
-//         url: item.url,
-//         image: item.image
-//     };
-// });

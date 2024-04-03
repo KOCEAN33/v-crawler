@@ -1,7 +1,7 @@
 import './env';
 import { PuppeteerCrawler } from 'crawlee';
-import { router } from './routes.js';
 import { getNewVtubers } from './repository/vtubers.repository';
+import { router } from './routes.js';
 import { db } from './database';
 
 // 1. 신규 V튜버 확인
@@ -13,7 +13,7 @@ const newChannelCrawler = new PuppeteerCrawler({
   requestHandler: router,
   // Comment this option to scrape the full website.
   maxRequestsPerCrawl: 20,
-  headless: true,
+  headless: false,
   autoscaledPoolOptions: {
     isFinishedFunction: () => disconnectDb(),
   },
@@ -30,7 +30,6 @@ const newChannels = await getNewVtubers();
 const newChannelUrls = newChannels.map((data) => data.url);
 
 await newChannelCrawler.addRequests(newChannelUrls);
-
 await newChannelCrawler.run();
 
 async function disconnectDb() {
