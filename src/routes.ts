@@ -1,21 +1,12 @@
-import {createPuppeteerRouter, puppeteerUtils} from 'crawlee';
-import {newChannelScrapeProcess} from "./scraper/new-channel.js";
-import {newVtuberScrapeProcess} from "./scraper/new-vtuber.js";
+import { createPuppeteerRouter } from 'crawlee';
+import { newChannelScrapeProcess } from './scraper/new-channel.js';
+import { newVtuberScrapeProcess } from './scraper/new-vtuber.js';
+import { updateNewVtubers } from './repository/vtubers.repository';
 
 export const router = createPuppeteerRouter();
 
-// tsuna ID = UCIjdfjcSaEgdjwbgjxC3ZWg
-
 router.addDefaultHandler(async ({ request, page, log }) => {
-
-    const data = await newVtuberScrapeProcess(page,request, log)
-    // await newChannelScrapeProcess(request, page, log)
-
-    console.log(data)
-
+  const { channelId, profile } = await newVtuberScrapeProcess(page, log);
+  // await newChannelScrapeProcess(request, page, log)
+  await updateNewVtubers(channelId, profile);
 });
-
-
-
-
-

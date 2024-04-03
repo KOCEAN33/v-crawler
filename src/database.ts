@@ -1,4 +1,4 @@
-import { Kysely, MysqlDialect } from 'kysely';
+import { Kysely, MysqlDialect, ParseJSONResultsPlugin } from 'kysely';
 import {DB} from "./@types/types";
 import { createPool } from 'mysql2';
 
@@ -31,5 +31,7 @@ export const db = new Kysely<DB>({
                 minVersion: 'TLSv1.2',
             },
         })
-    })
+    }),
+    plugins: [new ParseJSONResultsPlugin()],
+    // log: ['query']
 })
