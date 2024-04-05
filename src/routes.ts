@@ -3,10 +3,13 @@ import { newChannelScrapeProcess } from './scraper/new-channel.js';
 import { newVtuberScrapeProcess } from './scraper/new-vtuber.js';
 import { updateNewVtubers } from './repository/vtubers.repository';
 import { insertVtuberStreams } from './repository/streams.repository';
+import { getYoutubeChannelId } from './scraper/channelId';
+import { getVideoDesc } from './scraper/get-video-desc';
 
-export const router = createPuppeteerRouter();
+export const newChannelrouter = createPuppeteerRouter();
+export const getVideoRouter = createPuppeteerRouter();
 
-router.addDefaultHandler(async ({ request, page, log }) => {
+newChannelrouter.addDefaultHandler(async ({ request, page, log }) => {
   // 유튜브 프로필 업데이트
   const { channelId, profile } = await newVtuberScrapeProcess(page, log);
   try {
@@ -23,4 +26,8 @@ router.addDefaultHandler(async ({ request, page, log }) => {
   } catch (e) {
     log.error(`${profile.name}'s database update failed`);
   }
+});
+
+getVideoRouter.addDefaultHandler(async ({ request, page, log }) => {
+  const data = await getVideoDesc(request, page, log);
 });
