@@ -1,5 +1,5 @@
 import { db } from '../database';
-import { Stream } from '../@types/stream';
+import { Game, Stream } from '../@types/stream';
 
 export async function getVtuberByChannelId(channelId: string) {
   return await db
@@ -42,4 +42,27 @@ export async function insertVtuberStreams(
   } catch (e) {
     console.error(e);
   }
+}
+
+export async function getOrCreateGame(game: Game) {
+  const data = await db
+    .selectFrom('games')
+    .select(['id', 'youtube_id'])
+    .where('youtube_id', '=', game.id)
+    .executeTakeFirst();
+
+  if (!data) {
+    const create = await db
+      .insertInto('games')
+      .values({
+        title: game.title,
+        image: game.image,
+        youtube_id: game.id,
+        updated_at: new Date(),
+      })
+      .executeTakeFirst();
+    return Number(create.insertId);
+  }
+
+  return data.id;
 }

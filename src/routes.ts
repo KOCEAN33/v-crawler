@@ -29,5 +29,20 @@ newChannelrouter.addDefaultHandler(async ({ request, page, log }) => {
 });
 
 getVideoRouter.addDefaultHandler(async ({ request, page, log }) => {
-  const data = await getVideoDesc(request, page, log);
+  const { videoId, duration, date, game } = await getVideoDesc(
+    request,
+    page,
+    log,
+  );
+
+  if (game) {
+    const gameData = {
+      image: game.image,
+      id: game.id.split('/').pop(),
+      title: game.title,
+    };
+    console.log(videoId, duration, date, gameData);
+  }
+  // date 변환식
+  log.info('no game data');
 });

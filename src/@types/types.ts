@@ -21,9 +21,9 @@ export type Company = {
 };
 export type Game = {
   id: Generated<number>;
-  name: string;
-  url: string | null;
+  title: string;
   image: string | null;
+  youtube_id: string | null;
   created_at: Generated<Timestamp>;
   updated_at: Timestamp;
 };

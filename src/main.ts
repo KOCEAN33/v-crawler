@@ -51,7 +51,10 @@ const getVideoCrawler = new PuppeteerCrawler({
 });
 
 await getVideoCrawler.addRequests([
-  'https://www.youtube.com/watch?v=-odkfqEbesE',
+  'https://www.youtube.com/watch?v=oiY3bNCWBhI',
+  'https://www.youtube.com/watch?v=uu5cD9fD0oI',
+  'https://www.youtube.com/watch?v=jtLuZHWEy0U',
+  'https://www.youtube.com/watch?v=Jrl1BCO97l4',
 ]);
 
 await getVideoCrawler.run();

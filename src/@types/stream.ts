@@ -15,3 +15,10 @@ export interface Time {
 export interface Metadata {
   date: string;
 }
+
+export interface Game {
+  image: string;
+  id: string;
+  title: string;
+  subtitle: string;
+}
