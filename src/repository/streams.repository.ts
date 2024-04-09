@@ -1,9 +1,9 @@
 import { db } from '../database';
 import { Game, Stream } from '../@types/stream';
 
-export async function getVtuberByChannelId(channelId: string) {
+export async function getStreamsToUpdate(channelId: string) {
   return await db
-    .selectFrom('youtubes')
+    .selectFrom('streams')
     .select(['id', 'url', 'vtuber_id'])
     .where('url', 'like', `%${channelId}`)
     .executeTakeFirstOrThrow();
@@ -44,7 +44,7 @@ export async function insertVtuberStreams(
   }
 }
 
-export async function getOrCreateGame(game: Game) {
+export async function getOrCreateGame(game: Game): Promise<number> {
   const data = await db
     .selectFrom('games')
     .select(['id', 'youtube_id'])
@@ -65,4 +65,31 @@ export async function getOrCreateGame(game: Game) {
   }
 
   return data.id;
+}
+
+export async function updateNotFinishedStream(videoId: string) {
+  return await db
+    .updateTable('streams')
+    .set({ is_finished: 0, updated_at: new Date() })
+    .where('stream_id', '=', videoId)
+    .execute();
+}
+
+export async function updateStreamData(
+  videoId: string,
+  duration: number,
+  date: Date,
+  gameId: number | null,
+) {
+  return await db
+    .updateTable('streams')
+    .set({
+      duration: duration,
+      lived_at: date,
+      is_finished: 1,
+      game_id: gameId,
+      updated_at: new Date(),
+    })
+    .where('stream_id', '=', videoId)
+    .executeTakeFirst();
 }

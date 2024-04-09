@@ -26,10 +26,14 @@ async function getDurationFromPlayer(page): Promise<string> {
   return await page.$eval('.ytp-time-duration', (el) => el.textContent.trim());
 }
 
-async function getUploadDateFromDesc(page): Promise<string> {
-  return await page.$eval('span.bold:nth-child(3)', (el) =>
-    el.textContent.trim(),
-  );
+async function getUploadDateFromDesc(page): Promise<string | null> {
+  try {
+    return await page.$eval('span.bold:nth-child(3)', (el) =>
+      el.textContent.trim(),
+    );
+  } catch (error) {
+    return null;
+  }
 }
 
 async function getGameFromDesc(page): Promise<Game | undefined> {

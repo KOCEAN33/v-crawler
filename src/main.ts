@@ -1,7 +1,7 @@
 import './env';
 import { PuppeteerCrawler } from 'crawlee';
 import { getNewVtubers } from './repository/vtubers.repository';
-import { getVideoRouter, newChannelrouter } from './routes.js';
+import { getVideoRouter, newChannelRouter } from './routes.js';
 import { db } from './database';
 
 // 1. 신규 V튜버 확인
@@ -51,8 +51,8 @@ const getVideoCrawler = new PuppeteerCrawler({
 });
 
 await getVideoCrawler.addRequests([
-  'https://www.youtube.com/watch?v=oiY3bNCWBhI',
-  'https://www.youtube.com/watch?v=uu5cD9fD0oI',
+  'https://www.youtube.com/watch?v=eG2TvQpKNJI',
+  'https://www.youtube.com/watch?v=k08qDQmdMAY',
   'https://www.youtube.com/watch?v=jtLuZHWEy0U',
   'https://www.youtube.com/watch?v=Jrl1BCO97l4',
 ]);
