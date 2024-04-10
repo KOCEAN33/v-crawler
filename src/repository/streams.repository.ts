@@ -1,12 +1,13 @@
 import { db } from '../database';
 import { Game, Stream } from '../@types/stream';
 
-export async function getStreamsToUpdate(channelId: string) {
+export async function getStreamsToUpdate() {
   return await db
     .selectFrom('streams')
-    .select(['id', 'url', 'vtuber_id'])
-    .where('url', 'like', `%${channelId}`)
-    .executeTakeFirstOrThrow();
+    .select(['stream_id', 'is_finished'])
+    .where('is_finished', 'is', null)
+    .limit(10)
+    .execute();
 }
 
 export async function insertVtuberStreams(

@@ -3,6 +3,7 @@ import { PuppeteerCrawler } from 'crawlee';
 import { getNewVtubers } from './repository/vtubers.repository';
 import { getVideoRouter, newChannelRouter } from './routes.js';
 import { db } from './database';
+import { getStreamsToUpdate } from './repository/streams.repository';
 
 // 1. 신규 V튜버 확인
 // 2. 새로운 라이브 내역 확인
@@ -32,6 +33,13 @@ import { db } from './database';
 // await newChannelCrawler.addRequests(newChannelUrls);
 // await newChannelCrawler.run();
 
+const getStreams = async (): Promise<string[]> => {
+  const streams = await getStreamsToUpdate();
+  return streams.map(
+    (stream) => `https://youtube.com/watch?v=${stream.stream_id}`,
+  );
+};
+
 const getVideoCrawler = new PuppeteerCrawler({
   // proxyConfiguration: new ProxyConfiguration({ proxyUrls: ['...'] }),
   requestHandler: getVideoRouter,
@@ -50,12 +58,7 @@ const getVideoCrawler = new PuppeteerCrawler({
   },
 });
 
-await getVideoCrawler.addRequests([
-  'https://www.youtube.com/watch?v=eG2TvQpKNJI',
-  'https://www.youtube.com/watch?v=k08qDQmdMAY',
-  'https://www.youtube.com/watch?v=jtLuZHWEy0U',
-  'https://www.youtube.com/watch?v=Jrl1BCO97l4',
-]);
+await getVideoCrawler.addRequests(await getStreams());
 
 await getVideoCrawler.run();
 
