@@ -5,7 +5,9 @@ export async function getStreamsToUpdate() {
   return await db
     .selectFrom('streams')
     .select(['stream_id', 'is_finished'])
-    .where('is_finished', 'is', null)
+    .where((eb) =>
+      eb.or([eb('is_finished', '!=', 1), eb('is_finished', 'is', null)]),
+    )
     .limit(10)
     .execute();
 }
