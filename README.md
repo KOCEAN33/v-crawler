@@ -1,8 +1,16 @@
-# Crawlee + PuppeteerCrawler + TypeScript project
+# V-Tuber Streams Crawling Project
 
-This template is a production ready boilerplate for developing with `PuppeteerCrawler`. Use this to bootstrap your projects using the most up-to-date code.
+## Mode
+```bash
+pnpm start:prod --mode=1
+pnpm start:prod --mode=2
+```
+mode 1 : Get new v-tubers from database, and get all streams
 
-If you're looking for examples or want to learn more visit:
+mode 2 : Get description and metadata from youtube. stream duration, live date and played game information
 
-- [Documentation](https://crawlee.dev/api/puppeteer-crawler/class/PuppeteerCrawler)
-- [Examples](https://crawlee.dev/docs/examples/puppeteer-crawler)
+## TODO
+- Twitch Support
+  - Due to end of Twitch service in Korea, I Can not crawl or develop twitch crawling without VPN.
+- Accurate metadata
+  - YouTube doesn't show exactly the time of the stream. to get the accurate time data we need to use Youtube API
