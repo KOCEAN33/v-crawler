@@ -27,6 +27,7 @@ const newVtuberCrawler = new PuppeteerCrawler({
 async function finishCrawling() {
   const newChannels = await getNewVtubers();
   const newChannelUrls = newChannels.map((data) => data.url);
+  log.info(`Got ${newChannelUrls.length} V-Tubers`);
   if (newChannelUrls.length == 0) {
     await db.destroy();
     return true;
@@ -54,7 +55,7 @@ const getDescCrawler = new PuppeteerCrawler({
 
 const getStreams = async (): Promise<string[]> => {
   const streams = await getStreamsToUpdate();
-  log.info(`got ${streams.length} of streams`);
+  log.info(`Got ${streams.length} streams with no data`);
   return streams.map(
     (stream) => `https://youtube.com/watch?v=${stream.stream_id}`,
   );
