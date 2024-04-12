@@ -1,7 +1,6 @@
 import { createPuppeteerRouter } from 'crawlee';
 
 import { convertTimeToSeconds, convertToCurrentTime } from '../scraper/utils';
-
 import { getVideoDesc } from '../scraper/get-video-desc';
 import {
   getOrCreateGame,
@@ -17,7 +16,6 @@ getDescRouter.addDefaultHandler(async ({ request, page, log }) => {
     page,
     log,
   );
-  // console.log({ ID: videoId, Duration: duration, date: date, game: game });
 
   // date 변환식
   const formattedDate = convertToCurrentTime(date);
@@ -35,7 +33,7 @@ getDescRouter.addDefaultHandler(async ({ request, page, log }) => {
         subtitle: game.subtitle,
       };
       // 게임ID 쿼리 혹은 생성
-      const gameId = await getOrCreateGame(gameData);
+      const gameId = await getOrCreateGame(gameData, log);
       await updateStreamData(videoId, formattedDuration, formattedDate, gameId);
       log.info(`${videoId} is updated with ${gameData.title}`);
     } else {

@@ -47,7 +47,7 @@ export async function insertVtuberStreams(
   }
 }
 
-export async function getOrCreateGame(game: Game): Promise<number> {
+export async function getOrCreateGame(game: Game, log): Promise<number> {
   const data = await db
     .selectFrom('games')
     .select(['id', 'youtube_id'])
@@ -64,6 +64,7 @@ export async function getOrCreateGame(game: Game): Promise<number> {
         updated_at: new Date(),
       })
       .executeTakeFirst();
+    log.info(`New GAME created ${game.title}`);
     return Number(create.insertId);
   }
 

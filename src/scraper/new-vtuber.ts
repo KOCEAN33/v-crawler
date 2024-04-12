@@ -5,6 +5,7 @@
 
 import { puppeteerUtils } from 'crawlee';
 import { getYoutubeChannelId } from './channelId';
+import { Profile } from '../@types/vtubers';
 
 export async function newVtuberScrapeProcess(page, log) {
   await puppeteerUtils.infiniteScroll(page, { waitForSecs: 0 });
@@ -18,16 +19,9 @@ export async function newVtuberScrapeProcess(page, log) {
   return { channelId: channelId, profile: profile };
 }
 
-interface ChannelHeader {
-  image: string;
-  name: string;
-  handle: string;
-  description: string;
-}
-
-async function getProfile(page): Promise<ChannelHeader> {
+async function getProfile(page): Promise<Profile> {
   return await page.$$eval('#channel-header', ($posts) => {
-    const scrapedData: ChannelHeader[] = [];
+    const scrapedData: Profile[] = [];
 
     $posts.forEach((post) => {
       return scrapedData.push({

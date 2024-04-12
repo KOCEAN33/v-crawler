@@ -7,11 +7,11 @@ import { YoutubeStream } from '../@types/stream';
 import { extractVideoId } from './utils';
 
 export async function newChannelScrapeProcess(request, page, log) {
-  log.info(request.url);
+  log.info(`Opening... ${request.url}`);
+
   await page.goto(`${request.url}/streams`);
   await puppeteerUtils.infiniteScroll(page, { scrollDownAndUp: true });
   await page.waitForSelector('ytd-rich-grid-renderer');
-  // const channelId = await getYoutubeChannelId(page);
   const data = await getStreamsFromPage(page);
 
   const result = data.map((item) => {
