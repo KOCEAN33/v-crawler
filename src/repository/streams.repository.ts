@@ -1,12 +1,15 @@
 import { db } from '../database';
-import { Stream } from '../@types/stream';
+import { Game, Stream } from '../@types/stream';
 
-export async function getVtuberByChannelId(channelId: string) {
+export async function getStreamsToUpdate() {
   return await db
-    .selectFrom('youtubes')
-    .select(['id', 'url', 'vtuber_id'])
-    .where('url', 'like', `%${channelId}`)
-    .executeTakeFirstOrThrow();
+    .selectFrom('streams')
+    .select(['stream_id', 'is_finished'])
+    .where((eb) =>
+      eb.or([eb('is_finished', '!=', 1), eb('is_finished', 'is', null)]),
+    )
+    .limit(10)
+    .execute();
 }
 
 export async function insertVtuberStreams(
@@ -42,4 +45,54 @@ export async function insertVtuberStreams(
   } catch (e) {
     console.error(e);
   }
+}
+
+export async function getOrCreateGame(game: Game): Promise<number> {
+  const data = await db
+    .selectFrom('games')
+    .select(['id', 'youtube_id'])
+    .where('youtube_id', '=', game.id)
+    .executeTakeFirst();
+
+  if (!data) {
+    const create = await db
+      .insertInto('games')
+      .values({
+        title: game.title,
+        image: game.image,
+        youtube_id: game.id,
+        updated_at: new Date(),
+      })
+      .executeTakeFirst();
+    return Number(create.insertId);
+  }
+
+  return data.id;
+}
+
+export async function updateNotFinishedStream(videoId: string) {
+  return await db
+    .updateTable('streams')
+    .set({ is_finished: 0, updated_at: new Date() })
+    .where('stream_id', '=', videoId)
+    .execute();
+}
+
+export async function updateStreamData(
+  videoId: string,
+  duration: number,
+  date: Date,
+  gameId: number | null,
+) {
+  return await db
+    .updateTable('streams')
+    .set({
+      duration: duration,
+      lived_at: date,
+      is_finished: 1,
+      game_id: gameId,
+      updated_at: new Date(),
+    })
+    .where('stream_id', '=', videoId)
+    .executeTakeFirst();
 }

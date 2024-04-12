@@ -4,6 +4,7 @@
 
 import { puppeteerUtils } from 'crawlee';
 import { YoutubeStream } from '../@types/stream';
+import { extractVideoId } from './utils';
 
 export async function newChannelScrapeProcess(request, page, log) {
   log.info(request.url);
@@ -39,8 +40,3 @@ async function getStreamsFromPage(page) {
     return scrapedData;
   });
 }
-
-const extractVideoId = (youtubeLink: string) => {
-  const url = new URL(youtubeLink);
-  return url.searchParams.get('v');
-};

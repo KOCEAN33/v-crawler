@@ -1,12 +1,12 @@
 import { createPuppeteerRouter } from 'crawlee';
-import { newChannelScrapeProcess } from './scraper/new-channel.js';
-import { newVtuberScrapeProcess } from './scraper/new-vtuber.js';
-import { updateNewVtubers } from './repository/vtubers.repository';
-import { insertVtuberStreams } from './repository/streams.repository';
+import { newVtuberScrapeProcess } from '../scraper/new-vtuber';
+import { updateNewVtubers } from '../repository/vtubers.repository';
+import { newChannelScrapeProcess } from '../scraper/new-channel';
+import { insertVtuberStreams } from '../repository/streams.repository';
 
-export const router = createPuppeteerRouter();
+export const newVtuberRouter = createPuppeteerRouter();
 
-router.addDefaultHandler(async ({ request, page, log }) => {
+newVtuberRouter.addDefaultHandler(async ({ request, page, log }) => {
   // 유튜브 프로필 업데이트
   const { channelId, profile } = await newVtuberScrapeProcess(page, log);
   try {
