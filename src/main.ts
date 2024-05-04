@@ -11,7 +11,7 @@ import { getNewVtubers } from './repository/vtubers.repository';
 const newVtuberCrawler = new PuppeteerCrawler({
   requestHandler: newVtuberRouter,
   launchContext: { launchOptions: { args: ['--lang=ja'] } },
-  headless: true,
+  headless: false,
   autoscaledPoolOptions: {
     isFinishedFunction: () => finishCrawling(),
   },

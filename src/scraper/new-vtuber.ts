@@ -9,7 +9,7 @@ import { Profile } from '../@types/vtubers';
 
 export async function newVtuberScrapeProcess(page, log) {
   await puppeteerUtils.infiniteScroll(page, { waitForSecs: 0 });
-  await page.waitForSelector('img#img.style-scope.yt-img-shadow');
+  await page.waitForSelector('.ytd-channel-name');
 
   const channelId = await getYoutubeChannelId(page);
   const profile = await getProfile(page);

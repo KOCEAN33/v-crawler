@@ -9,6 +9,8 @@ import { extractVideoId } from './utils';
 export async function newChannelScrapeProcess(request, page, log) {
   log.info(`Opening... ${request.url}`);
 
+  await puppeteerUtils.blockRequests(page, { urlPatterns: ['.jpg', '.png'] });
+
   await page.goto(`${request.url}/streams`);
   await puppeteerUtils.infiniteScroll(page, { scrollDownAndUp: true });
   await page.waitForSelector('ytd-rich-grid-renderer');
