@@ -8,23 +8,24 @@ export const newVtuberRouter = createPuppeteerRouter();
 
 newVtuberRouter.addDefaultHandler(async ({ request, page, log }) => {
   // 유튜브 프로필 업데이트
-  const { channelId, profile } = await newVtuberScrapeProcess(page, log);
-  try {
-    await updateNewVtubers(channelId, profile);
-  } catch (error) {
-    log.error(JSON.stringify(error));
-  }
+  // const { channelId, profile } = await newVtuberScrapeProcess(page, log);
+  // try {
+  //   await updateNewVtubers(channelId, profile);
+  // } catch (error) {
+  //   log.error(JSON.stringify(error));
+  // }
 
   // 유튜브 라이브 스트리밍 기록 크롤링
   const result = await newChannelScrapeProcess(request, page, log);
-  const uniqueItems = result.filter(
-    (item: { id: string; title: string }, index: any, self: any[]) =>
-      index === self.findIndex((i) => i.id === item.id),
-  );
-  try {
-    await insertVtuberStreams(channelId, uniqueItems);
-    log.info(`${profile.name}'s youtube channel update successfully`);
-  } catch (e) {
-    log.error(`${profile.name}'s database update failed`);
-  }
+  console.log(result)
+  // const uniqueItems = result.filter(
+  //   (item: { id: string; title: string }, index: any, self: any[]) =>
+  //     index === self.findIndex((i) => i.id === item.id),
+  // );
+  // try {
+  //   await insertVtuberStreams(channelId, uniqueItems);
+  //   log.info(`${profile.name}'s youtube channel update successfully`);
+  // } catch (e) {
+  //   log.error(`${profile.name}'s database update failed`);
+  // }
 });

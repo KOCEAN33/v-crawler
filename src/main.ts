@@ -13,7 +13,7 @@ const newVtuberCrawler = new PuppeteerCrawler({
   launchContext: { launchOptions: { args: ['--lang=ja'] } },
   headless: false,
   autoscaledPoolOptions: {
-    isFinishedFunction: () => finishCrawling(),
+    // isFinishedFunction: () => finishCrawling(),
   },
   browserPoolOptions: {
     fingerprintOptions: {
@@ -24,10 +24,15 @@ const newVtuberCrawler = new PuppeteerCrawler({
   },
 });
 
+newVtuberCrawler.addRequests([
+  'https://www.youtube.com/@VCTkr',
+  'https://www.youtube.com/@mikenekoko',
+]);
+
 async function finishCrawling() {
   const newChannels = await getNewVtubers();
   const newChannelUrls = newChannels.map((data) => data.url);
-  log.info(`Got ${newChannelUrls.length} V-Tubers`);
+  log.info(`Got ${newChannelUrls.length} you-Tubers`);
   if (newChannelUrls.length == 0) {
     await db.destroy();
     return true;
